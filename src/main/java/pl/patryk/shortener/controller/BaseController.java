@@ -15,7 +15,10 @@ public class BaseController {
     protected User getCurrentUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         if (auth != null && auth.isAuthenticated()) {
-            return ((User) auth.getPrincipal());
+            Object principal = auth.getPrincipal();
+            if (principal instanceof User) {
+                return (User) principal;
+            }
         }
         return null;
     }

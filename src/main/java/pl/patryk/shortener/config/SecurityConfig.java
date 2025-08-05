@@ -40,13 +40,14 @@ public class SecurityConfig {
                     if (isDev) {
                         auth.requestMatchers(
                                 "/api/auth/**",
+                                "/api/shorten/save",
                                 "/h2-console/**",
                                 "/v3/api-docs/**",
                                 "/swagger-ui.html",
                                 "/swagger-ui/**"
                         ).permitAll();
                     } else {
-                        auth.requestMatchers("/api/auth/**").permitAll();
+                        auth.requestMatchers("/api/auth/**", "/api/shorten/save").permitAll();
                     }
                     auth.anyRequest().authenticated();
                 })
