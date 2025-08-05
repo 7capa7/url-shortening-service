@@ -1,8 +1,6 @@
 package pl.patryk.shortener.service;
 
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import pl.patryk.shortener.entity.ShortenedUrl;
@@ -12,8 +10,10 @@ import pl.patryk.shortener.exception.TagAlreadyExistsException;
 import pl.patryk.shortener.repository.ShortenedUrlRepository;
 import pl.patryk.shortener.utils.RandomTagGenerator;
 import pl.patryk.shortener.utils.ShortenUrlRequest;
+import pl.patryk.shortener.utils.ShortenedUrlDTO;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,13 +36,10 @@ public class UrlShortenerService {
             } while (shortedUrlRepository.existsByTag(tag));
         }
 
-        boolean isPrivate = currentUser != null && request.isPriv();
-
         ShortenedUrl shortUrl = ShortenedUrl.builder()
                 .originalUrl(request.getUrl())
                 .tag(tag)
                 .owner(currentUser)
-                .priv(isPrivate)
                 .clickCount(0L)
                 .createdAt(LocalDateTime.now())
                 .build();
@@ -50,5 +47,19 @@ public class UrlShortenerService {
         shortedUrlRepository.save(shortUrl);
 
         return this.baseUrl + "/" + tag;
+    }
+
+    public String getOriginalUrl(String tag) {
+        return shortedUrlRepository.findByTag(tag)
+                .map(e -> {
+                    e.setClickCount(e.getClickCount() + 1);
+                    shortedUrlRepository.save(e);
+                    return e.getOriginalUrl();
+                }).orElseThrow(InvalidDataException::new);
+    }
+
+    public List<ShortenedUrlDTO> getUserUrls(User currentUser) {
+        return shortedUrlRepository.findAllByOwner(currentUser)
+                .stream().map(e -> ShortenedUrlDTO.mapFrom(e, baseUrl)).toList();
     }
 }

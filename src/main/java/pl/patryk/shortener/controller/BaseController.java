@@ -2,6 +2,7 @@ package pl.patryk.shortener.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -29,5 +30,11 @@ public class BaseController {
 
     protected <T> ResponseEntity<T> created(T body) {
         return ResponseEntity.status(201).body(body);
+    }
+
+    protected <T> ResponseEntity<T> found(String url) {
+        return ResponseEntity.status(HttpStatus.FOUND)
+                .header("Location", url)
+                .build();
     }
 }

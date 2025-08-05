@@ -57,7 +57,6 @@ public class UrlShortenerServiceTest {
         assertEquals("https://google.com", saved.getOriginalUrl());
         assertEquals("tag123", saved.getTag());
         assertNull(saved.getOwner());
-        assertFalse(saved.isPriv());
     }
 
     @Test
@@ -99,41 +98,5 @@ public class UrlShortenerServiceTest {
 
         assertThrows(InvalidDataException.class, () -> service.shortenUrl(requestSpace, null));
         assertThrows(InvalidDataException.class, () -> service.shortenUrl(requestSlash, null));
-    }
-
-    @Test
-    void shouldSetPrivateTrue_forLoggedUser() {
-        var user = User.builder().id(String.valueOf(UUID.randomUUID())).email("test@test.com").build();
-        var request = ShortenUrlRequest.builder()
-                .url("https://google.com")
-                .priv(true)
-                .build();
-
-        when(repository.existsByTag(anyString())).thenReturn(false);
-
-        service.shortenUrl(request, user);
-
-        ArgumentCaptor<ShortenedUrl> captor = ArgumentCaptor.forClass(ShortenedUrl.class);
-        verify(repository).save(captor.capture());
-
-        assertTrue(captor.getValue().isPriv());
-        assertEquals(user, captor.getValue().getOwner());
-    }
-
-    @Test
-    void shouldSetPrivateFalse_whenNoUser() {
-        var request = ShortenUrlRequest.builder()
-                .url("https://google.com")
-                .priv(true)
-                .build();
-
-        when(repository.existsByTag(anyString())).thenReturn(false);
-
-        service.shortenUrl(request, null);
-
-        ArgumentCaptor<ShortenedUrl> captor = ArgumentCaptor.forClass(ShortenedUrl.class);
-        verify(repository).save(captor.capture());
-
-        assertFalse(captor.getValue().isPriv());
     }
 }

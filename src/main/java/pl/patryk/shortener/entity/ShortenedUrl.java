@@ -22,7 +22,6 @@ public class ShortenedUrl {
     private String originalUrl;
     @Column(unique = true, nullable = false)
     private String tag;
-    private boolean priv;
     private Long clickCount;
     private LocalDateTime createdAt;
     @ManyToOne(fetch = FetchType.LAZY)

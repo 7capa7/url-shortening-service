@@ -17,7 +17,6 @@ public class ShortenUrlRequest {
     private static final Pattern CUSTOM_TAG_PATTERN = Pattern.compile("^[a-zA-Z0-9_-]*$");
 
     private String url;
-    private boolean priv;
     private String customTag;
 
 
