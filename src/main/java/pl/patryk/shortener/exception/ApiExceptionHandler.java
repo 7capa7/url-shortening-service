@@ -1,13 +1,10 @@
-package pl.patryk.shortener.utils;
+package pl.patryk.shortener.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import pl.patryk.shortener.exception.InvalidDataException;
-import pl.patryk.shortener.exception.TagAlreadyExistsException;
-import pl.patryk.shortener.exception.UserAlreadyExistsException;
-import pl.patryk.shortener.exception.UserDoesNotExistOrPasswordIsInvalidException;
+import pl.patryk.shortener.utils.BaseResponse;
 
 @ControllerAdvice
 public class ApiExceptionHandler {
