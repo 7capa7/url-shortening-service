@@ -42,7 +42,7 @@ Rejestracja użytkownika.
 
 #### `POST /api/auth/login`
 
-Logowanie użytkownika.
+Logowanie użytkownika. (Wraz ze startem aplikacji tworzony jest testowy użytkownik o danych: "admin@admin.pl", "pass")
 
 **Request Body:**
 
